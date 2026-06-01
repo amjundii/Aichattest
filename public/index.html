@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tanya Jawab Sederhana</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; line-height: 1.6; }
+        textarea { width: 100%; height: 100px; padding: 10px; font-size: 16px; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        #kotak-jawaban { margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-left: 5px solid #007bff; border-radius: 3px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+
+    <h2>Tanya AI Jundii Bro</h2>
+    <p>Ketik apa saja, AI akan langsung menjawab tanpa drama simpan riwayat.</p>
+    
+    <textarea id="input-pertanyaan" placeholder="Contoh: Mengapa langit berwarna biru?"></textarea>
+    <button onclick="kirimKeServer()">Tanya AI</button>
+
+    <div id="kotak-jawaban">Jawaban AI akan muncul di sini...</div>
+
+    <script>
+        async function kirimKeServer() {
+            const pertanyaanUser = document.getElementById('input-pertanyaan').value;
+            const kotakJawaban = document.getElementById('kotak-jawaban');
+
+            if (!pertanyaanUser.trim()) return alert("Ketik dulu pertanyaannya bos!");
+
+            // Beri notifikasi kalau AI lagi mikir
+            kotakJawaban.innerText = "Jundii sedang makan...";
+
+            // Kirim data ke Backend kita (/tanya-ai)
+            const response = await fetch('/tanya-ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pertanyaan: pertanyaanUser })
+            });
+
+            const data = await response.json();
+            
+            // Tampilkan jawaban aslinya di layar
+            kotakJawaban.innerText = data.hasil;
+        }
+    </script>
+
+</body>
+</html>
